@@ -1,0 +1,39 @@
+// module to seed our database
+const mongoose = require("mongoose");
+const cities = require("./cities"); // city data (city, latitude, longitute, state, etc.)
+const { places, descriptors } = require("./seedHelpers"); // fake names to create fake cities and states
+const Campground = require("../models/campground"); // Campground model 
+
+// connect to MongoDB via Mongoose
+mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+    useNewUrlParser: true, // (new) URL string parser 
+    useCreateIndex: true, // (new) to define indexes in schemas
+    useUnifiedTopology: true // handles monitoring all the servers in a replica set or sharded cluster
+});
+// mongoose error handling via node
+mongoose.connection.on("error", console.error.bind(console, "connection error:")); // set "this" value to console (via "bind")
+mongoose.connection.once("open", () => {
+    console.log("Mongoose (27017): MongoDB connected.");
+});
+
+// create fake cities using seedHelpers.js module
+const sample = (array) => array[Math.floor(Math.random() * array.length)];
+// returns random element from array like "Roaring Camp", etc.
+
+// populate our mongo database with 50 randomly generated locations from our cities.js module
+const seedDB = async () => {
+    await Campground.deleteMany({}); // delete all previous data to start fresh
+    for (let i = 0; i < 50; i++) {
+        const random1000 = Math.floor(Math.random() * 1000); // there are 1000 cities in cities.js module
+        const camp = new Campground({
+            location: `${cities[random1000].city}, ${cities[random1000].state}`,
+            title: `${sample(descriptors)} ${sample(places)}` // "Petrified Pond", etc. (random)
+        });
+        await camp.save();
+    }
+};
+
+// close connection once done, no need to keep it open in a seeds file
+seedDB().then(() => {
+    mongoose.connection.close();
+})

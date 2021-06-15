@@ -16,10 +16,10 @@ mongoose.connect("mongodb://localhost:27017/yelp-camp", {
     useCreateIndex: true, // (new) to define indexes in schemas
     useUnifiedTopology: true // handles monitoring all the servers in a replica set or sharded cluster
 });
-// error handling via node
+// mongoose error handling via node
 mongoose.connection.on("error", console.error.bind(console, "connection error:")); // set "this" value to console (via "bind")
 mongoose.connection.once("open", () => {
-    console.log("MongoDB via Mongoose (27017): Connected");
+    console.log("Mongoose (27017): MongoDB connected.");
 });
 
 // http server
@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-// MAKECAMPGROUND
+// MAKECAMPGROUND - create first campground
 app.get("/makecampground", async (req, res) => {
     const camp = new Campground({ title: "My Backyard", description: "cheap camping!" });
     await camp.save();
