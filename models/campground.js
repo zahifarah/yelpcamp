@@ -9,5 +9,5 @@ const CampgroundSchema = new mongoose.Schema({
     location: String
 });
 
-// compile model + export
+// compile and export model
 module.exports = mongoose.model("Campground", CampgroundSchema);
