@@ -6,11 +6,13 @@ const app = express();
 const path = require("path"); // node module, allows customizing file and directory paths
 const mongoose = require("mongoose");
 const Campground = require("./models/campground"); // import Campground model 
+const methodOverride = require("method-override");
 
 app.set("view engine", "ejs"); // set ejs as view engine
 app.set("views", path.join(__dirname, "views")); // view directory === views
 
 app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded
+app.use(methodOverride("_method")); // method-override shorthand
 
 // connect to MongoDB via Mongoose
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {
@@ -44,17 +46,26 @@ app.get("/campgrounds", async (req, res) => {
 app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
-
-// (B) POST async route
 app.post("/campgrounds", async (req, res) => {
-    const campground = new Campground(req.body.campground);
-    // {"campground: {"title: "Some Title", "location": "Some location"}"}
+    const campground = new Campground(req.body.campground); // requires urlencoded middleware
+    // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
 });
 
 // CAMPGROUND DETAILS
 app.get("/campgrounds/:id", async (req, res) => {
-    const campground = await Campground.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id); // find campground by id
     res.render("campgrounds/show", { campground });
+});
+
+// UPDATE/EDIT CAMPGROUNDS
+app.get("/campgrounds/:id/edit", async (req, res) => {
+    const campground = await Campground.findById(req.params.id); // find campground by id
+    res.render("campgrounds/edit", { campground });
+});
+app.put("/campgrounds/:id", async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true });
+    res.redirect(`/campgrounds/${campground._id}`);
 });
