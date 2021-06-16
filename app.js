@@ -10,6 +10,8 @@ const Campground = require("./models/campground"); // import Campground model
 app.set("view engine", "ejs"); // set ejs as view engine
 app.set("views", path.join(__dirname, "views")); // view directory === views
 
+app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded
+
 // connect to MongoDB via Mongoose
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {
     useNewUrlParser: true, // (new) URL string parser 
@@ -44,6 +46,12 @@ app.get("/campgrounds/new", (req, res) => {
 })
 
 // (B) POST async route
+app.post("/campgrounds", async (req, res) => {
+    const campground = new Campground(req.body.campground);
+    // {"campground: {"title: "Some Title", "location": "Some location"}"}
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+});
 
 // CAMPGROUND DETAILS
 app.get("/campgrounds/:id", async (req, res) => {
