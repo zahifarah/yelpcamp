@@ -34,5 +34,6 @@ const seedDB = async () => {
 
 // close connection once done, no need to keep it open in a seeds file
 seedDB().then(() => { // async functions return a Promise --> thennable
+    console.log("Seed successful. NodeJS exited.")
     mongoose.connection.close()
 })
