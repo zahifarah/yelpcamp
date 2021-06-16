@@ -49,7 +49,8 @@ app.get("/campgrounds/new", (req, res) => {
 app.post("/campgrounds", async (req, res) => {
     const campground = new Campground(req.body.campground); // requires urlencoded middleware
     // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
-    await campground.save();
+    const added = await campground.save();
+    console.log(`Added: ${added}`)
     res.redirect(`/campgrounds/${campground._id}`);
 });
 
@@ -59,13 +60,22 @@ app.get("/campgrounds/:id", async (req, res) => {
     res.render("campgrounds/show", { campground });
 });
 
-// UPDATE/EDIT CAMPGROUNDS
+// UPDATE/EDIT CAMPGROUND
 app.get("/campgrounds/:id/edit", async (req, res) => {
     const campground = await Campground.findById(req.params.id); // find campground by id
     res.render("campgrounds/edit", { campground });
 });
 app.put("/campgrounds/:id", async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true });
-    res.redirect(`/campgrounds/${campground._id}`);
+    const updatedCampground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true });
+    console.log(updatedCampground);
+    res.redirect(`/campgrounds/${updatedCampground._id}`);
+});
+
+// DELETE CAMPGROUND
+app.delete("/campgrounds/:id/", async (req, res) => {
+    const { id } = req.params;
+    const deleted = await Campground.findByIdAndDelete(id);
+    console.log(`Deleted: ${deleted}`)
+    res.redirect("/campgrounds");
 });
