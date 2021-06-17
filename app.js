@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 
 // CAMPGROUNDS INDEX
 app.get("/campgrounds", async (req, res) => {
-    const campgrounds = await Campground.find({});
+    const campgrounds = await Campground.find({}); // console.log(campgrounds); object inside array
     res.render("campgrounds/index", { campgrounds });
 });
 
@@ -50,13 +50,13 @@ app.post("/campgrounds", async (req, res) => {
     const campground = new Campground(req.body.campground); // requires urlencoded middleware
     // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
-    console.log(`Added: ${added}`)
+    console.log(`Added: ${added}`);
     res.redirect(`/campgrounds/${campground._id}`);
 });
 
 // CAMPGROUND DETAILS
 app.get("/campgrounds/:id", async (req, res) => {
-    const campground = await Campground.findById(req.params.id); // find campground by id
+    const campground = await Campground.findById(req.params.id); // returns query object
     res.render("campgrounds/show", { campground });
 });
 
