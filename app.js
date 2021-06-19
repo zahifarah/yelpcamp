@@ -7,7 +7,9 @@ const path = require("path"); // node module, allows customizing file and direct
 const mongoose = require("mongoose");
 const Campground = require("./models/campground"); // import Campground model 
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate"); // engine that parses EJS
 
+app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
 app.set("views", path.join(__dirname, "views")); // view directory === views
 
