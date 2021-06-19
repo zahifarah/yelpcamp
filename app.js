@@ -11,7 +11,7 @@ const methodOverride = require("method-override");
 app.set("view engine", "ejs"); // set ejs as view engine
 app.set("views", path.join(__dirname, "views")); // view directory === views
 
-app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded
+app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded, returns a function
 app.use(methodOverride("_method")); // method-override shorthand
 
 // connect to MongoDB via Mongoose
