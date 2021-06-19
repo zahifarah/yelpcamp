@@ -1,14 +1,45 @@
 <% layout("layouts/boilerplate") %>
-    <!-- (B) part of EDIT campground  -->
-    <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="campground[title]" value="<%=campground.title%>">
+    <div class="row">
+        <h1 class="text-center">Edit Campground</h1>
+        <div class="col-6 offset-3">
+            <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
+                <!-- TITLE -->
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="campground[title]"
+                        value="<%=campground.title%>">
+                </div>
+                <!-- LOCATION -->
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="campground[location]"
+                        value="<%=campground.location%>">
+                </div>
+                <!-- IMAGE URL -->
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image URL</label>
+                    <input class="form-control" type="text" id="image" name="campground[image]"
+                        value="<%=campground.image%>">
+                </div>
+                <!-- PRICE -->
+                <div class="mb-3">
+                    <label class="form-label" for="price">Campground Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="price-label">$</span>
+                        <input class="form-control" type="text" id="price" name="campground[price]"
+                            value="<%=campground.price%>" placeholder="0.00" aria-label="price"
+                            aria-describedby="price-label">
+                    </div>
+                </div>
+                <!-- DESCRIPTION -->
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description"
+                        name="campground[description]"><%= campground.description %> </textarea>
+                </div>
+                <!-- SUBMIT BUTTON -->
+                <div class="mb-3"><button class="btn btn-info">Update Campground</button></div>
+            </form>
+            <a href="/campgrounds/<%=campground._id%> ">Back to Campground</a>
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="campground[location]" value="<%=campground.location%>">
-        </div>
-        <button>Update Campground</button>
-    </form>
-    <a href="/campgrounds/<%=campground._id%> ">Back to Campground</a>
+    </div>
