@@ -6,8 +6,9 @@ const app = express();
 const path = require("path"); // node module, allows customizing file and directory paths
 const mongoose = require("mongoose");
 const Campground = require("./models/campground"); // import Campground model 
-const methodOverride = require("method-override");
+const methodOverride = require("method-override"); // override GET/POST verbs in HTTP requests
 const ejsMate = require("ejs-mate"); // engine that parses EJS
+const catchAsync = require("./utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
@@ -34,52 +35,49 @@ app.get("/", (req, res) => {
 });
 
 // CAMPGROUNDS INDEX
-app.get("/campgrounds", async (req, res) => {
+app.get("/campgrounds", catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({}); // console.log(campgrounds); object inside array
     res.render("campgrounds/index", { campgrounds });
-});
+}));
 
 // NEW CAMPGROUND
 app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
-app.post("/campgrounds", async (req, res, next) => {
-    try {
-        const campground = new Campground(req.body.campground); // requires urlencoded middleware
-        // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
-        const added = await campground.save();
-        console.log(`Added: ${added}`);
-        res.redirect(`/campgrounds/${campground._id}`);
-    } catch (e) {
-        next(e);
-    }
-});
+app.post("/campgrounds", catchAsync(async (req, res, next) => {
+    const campground = new Campground(req.body.campground); // requires urlencoded middleware
+    // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
+    const added = await campground.save();
+    console.log(`Added: ${added}`);
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
 
-// CAMPGROUND SHOW/DETAILS
-app.get("/campgrounds/:id", async (req, res) => {
+// CAMPGROUND SHOW DETAILS
+app.get("/campgrounds/:id", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id); // returns query object
     res.render("campgrounds/show", { campground });
-});
+}));
 
-// UPDATE/EDIT CAMPGROUND
-app.get("/campgrounds/:id/edit", async (req, res) => {
+// EDIT CAMPGROUND DETAILS
+app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id); // find campground by id
     res.render("campgrounds/edit", { campground });
-});
-app.put("/campgrounds/:id", async (req, res) => {
+}));
+
+app.put("/campgrounds/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
     const updatedCampground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true });
     console.log(updatedCampground);
     res.redirect(`/campgrounds/${updatedCampground._id}`);
-});
+}));
 
 // DELETE CAMPGROUND
-app.delete("/campgrounds/:id/", async (req, res) => {
+app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`Deleted: ${deleted}`)
     res.redirect("/campgrounds");
-});
+}));
 
 // BASIC ERROR HANDLER (MIDDLEWARE)
 app.use((err, req, res, next) => {
