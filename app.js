@@ -81,12 +81,12 @@ app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
     res.redirect("/campgrounds");
 }));
 
-// ExpressError Class
+// ERROR HANDLER: NO MATCH ROUTES
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404))
 });
 
-// BASIC ERROR HANDLER (MIDDLEWARE)
+// GENERAL ERROR HANDLER
 app.use((err, req, res, next) => {
     const { statusCode = 500, message = "Something went wrong." } = err;
     res.status(statusCode).send(message);
