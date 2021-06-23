@@ -9,6 +9,7 @@ const Campground = require("./models/campground"); // import Campground model
 const methodOverride = require("method-override"); // override GET/POST verbs in HTTP requests
 const ejsMate = require("ejs-mate"); // engine that parses EJS
 const catchAsync = require("./utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
+const ExpressError = require("./utils/ExpressError"); // Extend Error with Express Class
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
@@ -45,6 +46,7 @@ app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
+    if (!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
     const campground = new Campground(req.body.campground); // requires urlencoded middleware
     // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
@@ -79,9 +81,15 @@ app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
     res.redirect("/campgrounds");
 }));
 
+// ExpressError Class
+app.all("*", (req, res, next) => {
+    next(new ExpressError("Page Not Found", 404))
+});
+
 // BASIC ERROR HANDLER (MIDDLEWARE)
 app.use((err, req, res, next) => {
-    res.send("Oh boy! Something went wrong!");
+    const { statusCode = 500, message = "Something went wrong." } = err;
+    res.status(statusCode).send(message);
 });
 
 // SERVER
