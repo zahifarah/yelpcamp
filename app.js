@@ -28,11 +28,6 @@ mongoose.connection.once("open", () => {
     console.log("Mongoose (27017): MongoDB connected.");
 });
 
-// http server
-app.listen(3000, () => {
-    console.log("Localhost (3000): listening...")
-});
-
 // HOME
 app.get("/", (req, res) => {
     res.render("home");
@@ -48,12 +43,16 @@ app.get("/campgrounds", async (req, res) => {
 app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
-app.post("/campgrounds", async (req, res) => {
-    const campground = new Campground(req.body.campground); // requires urlencoded middleware
-    // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
-    const added = await campground.save();
-    console.log(`Added: ${added}`);
-    res.redirect(`/campgrounds/${campground._id}`);
+app.post("/campgrounds", async (req, res, next) => {
+    try {
+        const campground = new Campground(req.body.campground); // requires urlencoded middleware
+        // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
+        const added = await campground.save();
+        console.log(`Added: ${added}`);
+        res.redirect(`/campgrounds/${campground._id}`);
+    } catch (e) {
+        next(e);
+    }
 });
 
 // CAMPGROUND SHOW/DETAILS
@@ -80,4 +79,14 @@ app.delete("/campgrounds/:id/", async (req, res) => {
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`Deleted: ${deleted}`)
     res.redirect("/campgrounds");
+});
+
+// BASIC ERROR HANDLER (MIDDLEWARE)
+app.use((err, req, res, next) => {
+    res.send("Oh boy! Something went wrong!");
+});
+
+// SERVER
+app.listen(3000, () => {
+    console.log("Localhost (3000): listening...")
 });
