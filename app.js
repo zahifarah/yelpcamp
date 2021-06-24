@@ -10,6 +10,7 @@ const methodOverride = require("method-override"); // override GET/POST verbs in
 const ejsMate = require("ejs-mate"); // engine that parses EJS
 const catchAsync = require("./utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const ExpressError = require("./utils/ExpressError"); // Extends Error with custom functionality
+const Joi = require("joi");
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
@@ -46,9 +47,29 @@ app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
-    if (!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
-    const campground = new Campground(req.body.campground); // requires urlencoded middleware
-    // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
+
+    // define JOI schema
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            location: Joi.string.required(),
+            description: Joi.string.required(),
+        }).required(),
+    });
+    // deconstruct {error} on assign + pass data through to JOI schema
+    const { error } = campgroundSchema.validate(req.body);
+    // check if there's an error property
+    if (error) {
+        // take details (an array of objects) map over them and return a single new string.
+        const msg = error.details.map(el => el.message).join(",");
+        // throw an error if there is with appropriate message and status code
+        throw new ExpressError(msg, 400);
+    };
+    console.log(error);
+
+    const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
     console.log(`ADDED: ${added}`);
     res.redirect(`/campgrounds/${campground._id}`);
