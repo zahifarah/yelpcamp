@@ -47,15 +47,14 @@ app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
-
     // define JOI schema
     const campgroundSchema = Joi.object({
         campground: Joi.object({
             title: Joi.string().required(),
             price: Joi.number().required().min(0),
             image: Joi.string().required(),
-            location: Joi.string.required(),
-            description: Joi.string.required(),
+            location: Joi.string().required(),
+            description: Joi.string().required(),
         }).required(),
     });
     // deconstruct {error} on assign + pass data through to JOI schema
@@ -67,7 +66,6 @@ app.post("/campgrounds", catchAsync(async (req, res, next) => {
         // throw an error if there is with appropriate message and status code
         throw new ExpressError(msg, 400);
     };
-    console.log(error);
 
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
