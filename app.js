@@ -9,7 +9,7 @@ const Campground = require("./models/campground"); // import Campground model
 const methodOverride = require("method-override"); // override GET/POST verbs in HTTP requests
 const ejsMate = require("ejs-mate"); // engine that parses EJS
 const catchAsync = require("./utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
-const ExpressError = require("./utils/ExpressError"); // Extend Error with Express Class
+const ExpressError = require("./utils/ExpressError"); // Extends Error with custom functionality
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
