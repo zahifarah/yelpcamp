@@ -50,7 +50,7 @@ app.post("/campgrounds", catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground); // requires urlencoded middleware
     // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
-    console.log(`Added: ${added}`);
+    console.log(`ADDED: ${added}`);
     res.redirect(`/campgrounds/${campground._id}`);
 }));
 
@@ -77,7 +77,7 @@ app.put("/campgrounds/:id", catchAsync(async (req, res) => {
 app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
-    console.log(`Deleted: ${deleted}`)
+    console.log(`DELETED: ${deleted}`)
     res.redirect("/campgrounds");
 }));
 
@@ -88,8 +88,10 @@ app.all("*", (req, res, next) => {
 
 // GENERAL ERROR HANDLER
 app.use((err, req, res, next) => {
-    const { statusCode = 500, message = "Something went wrong." } = err;
-    res.status(statusCode).send(message);
+    // const { statusCode = 500, message = "Something went wrong." } = err;
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = "Oh No, Something Went Wrong!";
+    res.status(statusCode).render("error", { err });
 });
 
 // SERVER
