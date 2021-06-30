@@ -28,7 +28,7 @@ const validateCampground = (req, res, next) => {
     if (error) {
         // take details (an array of objects) map over them and return a single new string.
         const msg = error.details.map(el => el.message).join(",");
-        // throw an error if there is with appropriate message and status code
+        // throw an error with the relevant message and status code
         throw new ExpressError(msg, 400);
     } else {
         next();
@@ -44,7 +44,7 @@ mongoose.connect("mongodb://localhost:27017/yelp-camp", {
 // mongoose error handling via node
 mongoose.connection.on("error", console.error.bind(console, "connection error:")); // set "this" value to console (via "bind")
 mongoose.connection.once("open", () => {
-    console.log("Mongoose (27017): MongoDB connected.");
+    console.log("Mongoose (27017): \"yelp-camp\" connected.");
 });
 
 // HOME
