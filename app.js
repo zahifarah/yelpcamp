@@ -10,7 +10,7 @@ const methodOverride = require("method-override"); // override GET/POST verbs in
 const ejsMate = require("ejs-mate"); // engine that parses EJS
 const catchAsync = require("./utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const ExpressError = require("./utils/ExpressError"); // Extends Error with custom functionality
-const { campgroundSchema } = require("./schemas.js"); // Deconstructing as we'll have multiple schemas in the future
+const { campgroundJoiSchema } = require("./schemas.js"); // Deconstructing as we'll have multiple schemas in the future
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
@@ -23,7 +23,7 @@ app.use(methodOverride("_method")); // method-override shorthand
 // Middleware function --> the signature is (req res, next)
 const validateCampground = (req, res, next) => {
     // deconstruct {error} on assign + pass data through to JOI schema
-    const { error } = campgroundSchema.validate(req.body);
+    const { error } = campgroundJoiSchema.validate(req.body);
     // check if there's an error property
     if (error) {
         // take details (an array of objects) map over them and return a single new string.
