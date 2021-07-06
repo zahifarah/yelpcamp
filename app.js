@@ -10,7 +10,8 @@ const methodOverride = require("method-override"); // override GET/POST verbs in
 const ejsMate = require("ejs-mate"); // engine that parses EJS
 const catchAsync = require("./utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const ExpressError = require("./utils/ExpressError"); // Extends Error with custom functionality
-const { campgroundJoiSchema } = require("./schemas.js"); // Deconstructing as we'll have multiple schemas in the future
+const { campgroundSchema, reviewSchema } = require("./schemas.js"); // Deconstructing as we'll have multiple schemas in the future
+const Review = require("./models/review");
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
@@ -23,8 +24,20 @@ app.use(methodOverride("_method")); // method-override shorthand
 // Middleware function --> the signature is (req res, next)
 const validateCampground = (req, res, next) => {
     // deconstruct {error} on assign + pass data through to JOI schema
-    const { error } = campgroundJoiSchema.validate(req.body);
+    const { error } = campgroundSchema.validate(req.body);
     // check if there's an error property
+    if (error) {
+        // take details (an array of objects) map over them and return a single new string.
+        const msg = error.details.map(el => el.message).join(",");
+        // throw an error with the relevant message and status code
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    };
+};
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
     if (error) {
         // take details (an array of objects) map over them and return a single new string.
         const msg = error.details.map(el => el.message).join(",");
@@ -95,6 +108,19 @@ app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
     console.log(`DELETED: ${deleted}`)
     res.redirect("/campgrounds");
 }));
+
+// ========================================================================================================================
+// REVIEW: CREATE 
+app.post("/campgrounds/:id/reviews", validateReview, catchAsync(async (req, res, next) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review); // grabs both the rating on slider + text review, both stored in [review]
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+
+// ========================================================================================================================
 
 // ERROR HANDLER: NO MATCH ROUTES
 app.all("*", (req, res, next) => {
