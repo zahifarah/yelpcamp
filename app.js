@@ -65,13 +65,13 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-// CAMPGROUNDS INDEX
+// CAMPGROUNDS: INDEX
 app.get("/campgrounds", catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({}); // console.log(campgrounds); object inside array
     res.render("campgrounds/index", { campgrounds });
 }));
 
-// NEW CAMPGROUND
+// CAMPGROUNDS: NEW
 app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
@@ -82,13 +82,13 @@ app.post("/campgrounds", validateCampground, catchAsync(async (req, res, next) =
     res.redirect(`/campgrounds/${campground._id}`);
 }));
 
-// CAMPGROUND SHOW DETAILS
+// CAMPGROUNDS: SHOW DETAILS
 app.get("/campgrounds/:id", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id); // returns query object
     res.render("campgrounds/show", { campground });
 }));
 
-// EDIT CAMPGROUND DETAILS
+// CAMPGROUNDS: EDIT DETAILS
 app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id); // find campground by id
     res.render("campgrounds/edit", { campground });
@@ -101,7 +101,7 @@ app.put("/campgrounds/:id", validateCampground, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${updatedCampground._id}`);
 }));
 
-// DELETE CAMPGROUND
+// CAMPGROUNDS: DELETE
 app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
@@ -110,7 +110,7 @@ app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
 }));
 
 // ========================================================================================================================
-// REVIEW: CREATE 
+// REVIEWS: CREATE 
 app.post("/campgrounds/:id/reviews", validateReview, catchAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review); // grabs both the rating on slider + text review, both stored in [review]
