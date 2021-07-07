@@ -84,7 +84,8 @@ app.post("/campgrounds", validateCampground, catchAsync(async (req, res, next) =
 
 // CAMPGROUNDS: SHOW DETAILS
 app.get("/campgrounds/:id", catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id); // returns query object
+    const campground = await Campground.findById(req.params.id).populate("reviews"); // returns query object
+    // console.log(campground); // test if populate works in terminal
     res.render("campgrounds/show", { campground });
 }));
 
@@ -110,7 +111,7 @@ app.delete("/campgrounds/:id/", catchAsync(async (req, res) => {
 }));
 
 // ========================================================================================================================
-// REVIEWS: CREATE 
+// REVIEWS: CREATE
 app.post("/campgrounds/:id/reviews", validateReview, catchAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review); // grabs both the rating on slider + text review, both stored in [review]
