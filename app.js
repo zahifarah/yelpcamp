@@ -121,6 +121,14 @@ app.post("/campgrounds/:id/reviews", validateReview, catchAsync(async (req, res,
     res.redirect(`/campgrounds/${campground._id}`);
 }));
 
+// REVIEWS: DELETE
+app.delete("/campgrounds/:id/reviews/:reviewId", catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // pull (delete) only the target reviewId
+    await Review.findByIdAndDelete(reviewId); // will still have a reference of that campground in the array property reviews of campgroundSchema.
+    res.redirect(`/campgrounds/${id}`);
+}));
+
 // ========================================================================================================================
 
 // ERROR HANDLER: NO MATCH ROUTES
