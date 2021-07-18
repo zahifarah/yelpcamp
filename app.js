@@ -75,6 +75,7 @@ app.get("/campgrounds", catchAsync(async (req, res) => {
 app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
+
 app.post("/campgrounds", validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
