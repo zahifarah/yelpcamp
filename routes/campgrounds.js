@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const { campgroundSchema } = require('../schemas.js'); // JOI schema
 
+const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const ExpressError = require("../utils/ExpressError"); // Extends Error with custom functionality
 const Campground = require("../models/campground"); // import Campground model 
 
-// Middleware function --> the signature is (req res, next)
+// JOI VALIDATION
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body); // deconstruct {error} on assign + pass data through to JOI schema
     if (error) {  // check if there's an error property
