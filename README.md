@@ -3,7 +3,7 @@ YelpCamp is a web app where registered users can create and review campgrounds.
 
 ## Tech Stack ##
 - NodeJS, Express, MongoDB and Bootstrap 5.
-- PassportJS was used to handle authentication.
+- PassportJS to handle authentication.
 
 ## Features ##
 - Visitors can view listed campgrounds (and their reviews, ratings etc.)
