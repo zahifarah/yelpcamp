@@ -31,6 +31,7 @@ router.get("/new", (req, res) => {
 router.post("/", validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
+    req.flash("success", "New Campground successfully created!");
     console.log(`ADDED: ${added}`);
     res.redirect(`/campgrounds/${campground._id}`);
 }));
