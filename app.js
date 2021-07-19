@@ -14,7 +14,8 @@ const reviews = require("./routes/reviews") // import and assign review routes t
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {
     useNewUrlParser: true, // (new) URL string parser 
     useCreateIndex: true, // (new) to define indexes in schemas
-    useUnifiedTopology: true // handles monitoring all the servers in a replica set or sharded cluster
+    useUnifiedTopology: true, // handles monitoring all the servers in a replica set or sharded cluster
+    useFindAndModify: false // handle deprecation warning for findAndUpdate() 
 });
 mongoose.connection.on("error", console.error.bind(console, "connection error:")); // set "this" value to console (via "bind")
 mongoose.connection.once("open", () => {
@@ -25,13 +26,14 @@ const app = express();
 
 app.engine("ejs", ejsMate); // set ejsMate as EJS template engine
 app.set("view engine", "ejs"); // set ejs as view engine
-app.set("views", path.join(__dirname, "views")); // view directory === views
+app.set("views", path.join(__dirname, "views")); // view directory === absolute path ends with /views
 
 app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded, returns a function
 app.use(methodOverride("_method")); // method-override
 
 app.use("/campgrounds", campgrounds);
 app.use("/campgrounds/:id/reviews", reviews);
+app.use(express.static(path.join(__dirname, "public"))); // static directory === absolute path ends with /public
 
 // ========================================================================================================================
 // HOME (BROKEN)
