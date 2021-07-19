@@ -3,14 +3,16 @@ const express = require("express");
 const path = require("path"); // node module, allows customizing file and directory paths
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate"); // engine that parses EJS
+const session = require("express-session");
+const flash = require("connect-flash");
 const ExpressError = require("./utils/ExpressError"); // Extends Error with custom functionality
 const methodOverride = require("method-override"); // override GET/POST verbs in HTTP requests
 
-// ROUTES
+// assign routes
 const campgrounds = require("./routes/campgrounds") // import and assign campground routes to variable
 const reviews = require("./routes/reviews") // import and assign review routes to variable
 
-// connect to MongoDB via Mongoose
+// MongoDB via Mongoose
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {
     useNewUrlParser: true, // (new) URL string parser 
     useCreateIndex: true, // (new) to define indexes in schemas
@@ -30,10 +32,32 @@ app.set("views", path.join(__dirname, "views")); // view directory === absolute 
 
 app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded, returns a function
 app.use(methodOverride("_method")); // method-override
+app.use(express.static(path.join(__dirname, "public"))); // static directory === absolute path ends with /public
 
+// session configuration settings
+const sessionConfig = {
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // supported by IE
+        maxAge: 1000 * 60 * 60 * 24 * 7, // not supported by IE but modern way of doing it
+    }
+};
+app.use(session(sessionConfig)); // remember to pass the settings on use
+app.use(flash()); // use flash(), it's not enough to require
+
+// flash message middleware
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success"); // flash access is scoped to every http requests
+    res.locals.error = req.flash("errors");
+    next(); // don't forget calling next() :)
+});
+
+// use routes
 app.use("/campgrounds", campgrounds);
 app.use("/campgrounds/:id/reviews", reviews);
-app.use(express.static(path.join(__dirname, "public"))); // static directory === absolute path ends with /public
 
 // ========================================================================================================================
 // HOME (BROKEN)
