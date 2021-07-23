@@ -45,13 +45,13 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7, // not supported by IE but modern way of doing it
     }
 };
-app.use(session(sessionConfig)); // remember to pass the settings on use
-app.use(flash()); // use flash(), it's not enough to require
+app.use(session(sessionConfig)); // remember to pass the settings - here as sessionConfig variable - on use
+app.use(flash()); // use flash(), it's not enough to require it
 
 // flash message middleware
 app.use((req, res, next) => {
     res.locals.success = req.flash("success"); // flash access is scoped to every http requests
-    res.locals.error = req.flash("errors");
+    res.locals.error = req.flash("error");
     next(); // don't forget calling next() :)
 });
 
