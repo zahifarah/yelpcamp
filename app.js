@@ -40,13 +40,17 @@ const sessionConfig = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        httpOnly: true,
+        httpOnly: true, /* helps mitigate the risk of client side 
+        script accessing the protected cookie (if the browser supports it) */
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // supported by IE
         maxAge: 1000 * 60 * 60 * 24 * 7, // not supported by IE but modern way of doing it
     }
 };
-app.use(session(sessionConfig)); // remember to pass the settings - here as sessionConfig variable - on use
-app.use(flash()); // use flash(), it's not enough to require it
+// session actual use with configuration settings as defined above
+app.use(session(sessionConfig));
+
+// use flash(), it's not enough to require it
+app.use(flash());
 
 // flash message middleware
 app.use((req, res, next) => {

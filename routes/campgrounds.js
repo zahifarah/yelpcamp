@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { campgroundSchema } = require('../schemas.js'); // JOI schema
+const Campground = require("../models/campground"); // import Campground model 
+const { campgroundSchema } = require('../schemas.js'); // JOI schema (contains campgroundSchema and reviewSchema)
 
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const ExpressError = require("../utils/ExpressError"); // Extends Error with custom functionality
-const Campground = require("../models/campground"); // import Campground model 
 
-// JOI VALIDATION
+// JOI VALIDATION MIDDLEWARE
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body); // deconstruct {error} on assign + pass data through to JOI schema
     if (error) {  // check if there's an error property
@@ -17,6 +17,7 @@ const validateCampground = (req, res, next) => {
     };
 };
 
+// PREPENDED BY "/campgrounds"
 // CAMPGROUNDS: INDEX
 router.get("/", catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({}); // console.log(campgrounds); object inside array

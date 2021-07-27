@@ -20,6 +20,7 @@ const validateReview = (req, res, next) => {
     };
 };
 
+// PREPENDED BY "/campgrounds/:id/reviews"
 // REVIEWS: CREATE
 router.post("/", validateReview, catchAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
