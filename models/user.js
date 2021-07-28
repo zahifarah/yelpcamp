@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema({
         unique: true // sets up an index, doesn't get parsed in validation middleware
     }
 });
+
+// important, things won't make sense if you overlook this line.
 userSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", userSchema);
