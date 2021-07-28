@@ -7,6 +7,9 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const ExpressError = require("./utils/ExpressError"); // Extends Error with custom functionality
 const methodOverride = require("method-override"); // override GET/POST verbs in HTTP requests
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 
 // assign routes
 const campgrounds = require("./routes/campgrounds") // import and assign campground routes to variable
@@ -46,11 +49,18 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7, // not supported by IE but modern way of doing it
     }
 };
-// session actual use with configuration settings as defined above
-app.use(session(sessionConfig));
 
-// use flash(), it's not enough to require it
-app.use(flash());
+// USES
+app.use(session(sessionConfig)); // session actual use with configuration settings as defined above
+app.use(flash()); // use flash(), it's not enough to require it
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistant logging session (alternative: log-in on every single request)
+// passport-local-mongoose methods
+passport.use(new LocalStrategy(User.authenticate())); // new strategy + PLM method
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 // flash message middleware
 app.use((req, res, next) => {
@@ -58,6 +68,16 @@ app.use((req, res, next) => {
     res.locals.error = req.flash("error");
     next(); // don't forget calling next() :)
 });
+
+// HOW PASSPORT.JS WORKS - HARDCORE REGISTER NEW USER
+// app.get("/fake", async (req, res) => {
+//     const user = new User({
+//         email: "colt@gmail.com",
+//         username: "Colttt"
+//     });
+//     const newUser = await User.register(user, "chicken"); // will hash and salt password + store it
+//     res.send(newUser);
+// });
 
 // use routes
 app.use("/campgrounds", campgrounds);
