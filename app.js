@@ -11,9 +11,10 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
-// assign routes
-const campgrounds = require("./routes/campgrounds") // import and assign campground routes to variable
-const reviews = require("./routes/reviews") // import and assign review routes to variable
+// import routes
+const userRoutes = require("./routes/users");
+const campgroundRoutes = require("./routes/campgrounds");
+const reviewRoutes = require("./routes/reviews");
 
 // MongoDB via Mongoose
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {
@@ -79,9 +80,15 @@ app.use((req, res, next) => {
 //     res.send(newUser);
 // });
 
+/*
+GET  /register -> SERVE FORM
+POST /register -> CREATE A USER
+*/
+
 // use routes
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+app.use("/", userRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 // ========================================================================================================================
 // HOME (BROKEN)
