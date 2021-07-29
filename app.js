@@ -70,21 +70,6 @@ app.use((req, res, next) => {
     next(); // don't forget calling next() :)
 });
 
-// HOW PASSPORT.JS WORKS - HARDCORE REGISTER NEW USER
-// app.get("/fake", async (req, res) => {
-//     const user = new User({
-//         email: "colt@gmail.com",
-//         username: "Colttt"
-//     });
-//     const newUser = await User.register(user, "chicken"); // will hash and salt password + store it
-//     res.send(newUser);
-// });
-
-/*
-GET  /register -> SERVE FORM
-POST /register -> CREATE A USER
-*/
-
 // use routes
 app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
