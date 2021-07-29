@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campground"); // import Campground model 
 const { campgroundSchema } = require('../schemas.js'); // JOI schema (contains campgroundSchema and reviewSchema)
+const { isLoggedIn } = require("../middleware"); // isLoggedIn() middleware
 
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 const ExpressError = require("../utils/ExpressError"); // Extends Error with custom functionality
@@ -25,11 +26,11 @@ router.get("/", catchAsync(async (req, res) => {
 }));
 
 // CAMPGROUNDS: NEW
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("campgrounds/new");
-})
+});
 
-router.post("/", validateCampground, catchAsync(async (req, res) => {
+router.post("/", isLoggedIn, validateCampground, catchAsync(async (req, res) => {
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
     req.flash("success", "New Campground successfully created!");
@@ -49,7 +50,7 @@ router.get("/:id", catchAsync(async (req, res) => {
 }));
 
 // CAMPGROUNDS: EDIT DETAILS
-router.get("/:id/edit", catchAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id); // find campground by id
     if (!campground) {
         req.flash("error", "Cannot find that campground!");
@@ -58,7 +59,7 @@ router.get("/:id/edit", catchAsync(async (req, res) => {
     res.render("campgrounds/edit", { campground });
 }));
 
-router.put("/:id", validateCampground, catchAsync(async (req, res) => {
+router.put("/:id", isLoggedIn, validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     const updatedCampground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true });
     req.flash("success", "Successfully updated campground!");
@@ -68,7 +69,7 @@ router.put("/:id", validateCampground, catchAsync(async (req, res) => {
 }));
 
 // CAMPGROUNDS: DELETE
-router.delete("/:id/", catchAsync(async (req, res) => {
+router.delete("/:id/", isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`DELETED: ${deleted}`)
