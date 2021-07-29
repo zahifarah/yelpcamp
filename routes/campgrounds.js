@@ -29,7 +29,7 @@ router.get("/new", (req, res) => {
     res.render("campgrounds/new");
 })
 
-router.post("/", validateCampground, catchAsync(async (req, res, next) => {
+router.post("/", validateCampground, catchAsync(async (req, res) => {
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
     const added = await campground.save();
     req.flash("success", "New Campground successfully created!");

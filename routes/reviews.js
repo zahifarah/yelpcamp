@@ -22,7 +22,7 @@ const validateReview = (req, res, next) => {
 
 // PREPENDED BY "/campgrounds/:id/reviews"
 // REVIEWS: CREATE
-router.post("/", validateReview, catchAsync(async (req, res, next) => {
+router.post("/", validateReview, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review); // grabs both the rating on slider + text review, both stored in [review]
     campground.reviews.push(review);
