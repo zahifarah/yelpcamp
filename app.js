@@ -63,7 +63,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// (g)locals: we have access to them in every single template
+// LOCALS: we have access to them in every single template
 app.use((req, res, next) => {
     console.log(req.session); // print entire session to see what's going on
     res.locals.currentUser = req.user; // access deserialized User information via Passport
