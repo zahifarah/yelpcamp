@@ -28,7 +28,13 @@ router.post("/", isLoggedIn, validateCampground, catchAsync(async (req, res) => 
 
 // CAMPGROUNDS: SHOW DETAILS
 router.get("/:id", catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id).populate("reviews").populate("author"); // returns query object
+    const campground = await Campground.findById(req.params.id).populate({
+        path: "reviews", // populate all the reviews from the reviews array, on the one campground we're finding.
+        populate: { // then, populate on each one of them their author (so every single review will have its
+            path: "author" // author populated.
+        }
+    })
+        .populate("author"); // returns query object
     console.log(campground); // terminal feedback on show page GET request
     if (!campground) {
         req.flash("error", "Cannot find that campground!");
