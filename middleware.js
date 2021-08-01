@@ -1,8 +1,9 @@
 const ExpressError = require("./utils/ExpressError");
 const Campground = require("./models/campground"); // import Campground model 
+const Review = require("./models/review");
 const { campgroundSchema, reviewSchema } = require("./schemas.js"); // JOI schema, required to run validateCampground
 
-// login middleware
+// check if logged-in
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl; // stores the originalUrl in session
@@ -14,7 +15,7 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 };
 
-// campground author
+// check if Campground author
 module.exports.isAuthor = async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
@@ -25,7 +26,21 @@ module.exports.isAuthor = async (req, res, next) => {
     next(); // don't forget this :)
 };
 
-// campground JOI-based validation
+// check if Review author
+module.exports.isReviewAuthor = async (req, res, next) => {
+    // review path is basically --> /campgrounds/id/reviews(?)/reviewId
+    const { id, reviewId } = req.params; // the route is setup like that, it's "/:reviewId" (routes)
+    const review = await Review.findById(reviewId);
+    if (!review.author.equals(req.user._id)) {
+        req.flash("error", "You do not have permission to do that.");
+        return res.redirect(`/campgrounds/${id}`); // make sure to return
+    }
+    next(); // don't forget this :)
+};
+
+
+
+// review JOI-based validation
 module.exports.validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body); // deconstruct {error} on assign + pass data through to JOI schema
     if (error) {  // check if there's an error property
