@@ -3,22 +3,8 @@ const router = express.Router({ mergeParams: true });
 
 const Campground = require("../models/campground"); // import Campground model 
 const Review = require("../models/review"); // import Review model 
-
-const { reviewSchema } = require('../schemas.js'); // JOI schema
-
-const ExpressError = require("../utils/ExpressError"); // Extends Error with custom functionality
+const { validateReview } = require("../middleware"); // isLoggedIn() middleware
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
-
-// JOI VALIDATION
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(","); // take details (an array of objects) map over them and return a single new string.
-        throw new ExpressError(msg, 400); // throw an error with the relevant message and status code
-    } else {
-        next();
-    };
-};
 
 // PREPENDED BY "/campgrounds/:id/reviews"
 // REVIEWS: CREATE
