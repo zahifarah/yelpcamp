@@ -3,14 +3,15 @@ const router = express.Router({ mergeParams: true });
 
 const Campground = require("../models/campground"); // import Campground model 
 const Review = require("../models/review"); // import Review model 
-const { validateReview } = require("../middleware"); // isLoggedIn() middleware
+const { validateReview, isLoggedIn } = require("../middleware"); // isLoggedIn() middleware
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 
 // PREPENDED BY "/campgrounds/:id/reviews"
 // REVIEWS: CREATE
-router.post("/", validateReview, catchAsync(async (req, res) => {
+router.post("/", isLoggedIn, validateReview, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review); // grabs both the rating on slider + text review, both stored in [review]
+    review.author = req.user._id;
     campground.reviews.push(review);
     await review.save();
     await campground.save();
