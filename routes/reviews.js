@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 
 const Campground = require("../models/campground"); // import Campground model 
 const Review = require("../models/review"); // import Review model 
-const { validateReview, isLoggedIn } = require("../middleware"); // isLoggedIn() middleware
+const { validateReview, isLoggedIn, isReviewAuthor } = require("../middleware"); // isLoggedIn() middleware
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 
 // PREPENDED BY "/campgrounds/:id/reviews"
@@ -20,7 +20,7 @@ router.post("/", isLoggedIn, validateReview, catchAsync(async (req, res) => {
 }));
 
 // REVIEWS: DELETE
-router.delete("/:reviewId", catchAsync(async (req, res) => {
+router.delete("/:reviewId", isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // pull (delete) only the target reviewId
     await Review.findByIdAndDelete(reviewId); // will still have a reference of that campground in the array property reviews of campgroundSchema.
