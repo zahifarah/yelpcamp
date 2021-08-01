@@ -38,8 +38,6 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     next(); // don't forget this :)
 };
 
-
-
 // review JOI-based validation
 module.exports.validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body); // deconstruct {error} on assign + pass data through to JOI schema
