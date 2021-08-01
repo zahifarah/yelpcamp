@@ -63,9 +63,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// LOCALS: we have access to them in every single template
+// LOCALS: accessible in all templates
 app.use((req, res, next) => {
-    console.log(req.session); // print entire session to see what's going on
+    // console.log(req.session); // print entire session to see what's going on
     res.locals.currentUser = req.user; // access deserialized User information via Passport
     res.locals.success = req.flash("success"); // flash access is scoped to every http requests
     res.locals.error = req.flash("error");
