@@ -26,7 +26,7 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 1000); // there are 1000 cities in cities.js module
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
-            author: "610264c80296fc4341d1e27e",
+            author: "610690009842478ee0b44c33",
             location: `${cities[random1000].city}, ${cities[random1000].state}`, // "Modesto, California", etc. 
             title: `${sample(descriptors)} ${sample(places)}`, // "Petrified Pond", etc.
             image: "https://source.unsplash.com/collection/483251/", // 800x450
