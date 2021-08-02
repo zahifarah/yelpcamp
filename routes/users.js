@@ -7,17 +7,14 @@ const catchAsync = require("../utils/catchAsync");
 // controllers: objects that contain methods representing the logic for specific routes
 const users = require("../controllers/users");
 
-// REGISTER
-router.get("/register", users.renderRegister);
-
-router.post("/register", catchAsync(users.register));
+router.route("/register")
+    .get(users.renderRegister) // render register form
+    .post(catchAsync(users.register)); // post register form
 
 // LOGIN
-router.get("/login", users.renderLogin);
-
-router.post("/login",
-    passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }),
-    users.login);
+router.route("/login")
+    .get(users.renderLogin) // render login form
+    .post(passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }), users.login); // post register form
 
 // LOGOUT
 router.get("/logout", users.logout);

@@ -7,28 +7,19 @@ const catchAsync = require("../utils/catchAsync"); // wrapper function to catch 
 const campgrounds = require("../controllers/campgrounds");
 
 // Campground routes are prepended by "/campgrounds"
-// INDEX
-router.get("/", catchAsync(campgrounds.index));
 
-// NEW
-router.get("/new",
-    isLoggedIn,
-    campgrounds.renderNewForm);
+router.route("/")
+    .get(catchAsync(campgrounds.index)) // index
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground)); // new campground
 
-router.post("/",
-    isLoggedIn,
-    validateCampground,
-    catchAsync(campgrounds.createCampground));
+router.get("/new", isLoggedIn, campgrounds.renderNewForm); /* this should come before the show page,
+otherwise it will be confused by the runtime as an :id */
 
-// SHOW 
-router.get("/:id", catchAsync(campgrounds.showCampground));
+router.route("/:id")
+    .get(catchAsync(campgrounds.showCampground)) // show page
+    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground)) // update campground
+    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground)); // delete campground
 
-// EDIT 
-router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm));
-
-router.put("/:id", isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground));
-
-// DELETE
-router.delete("/:id/", isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
+router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm)); // edit campground
 
 module.exports = router;
