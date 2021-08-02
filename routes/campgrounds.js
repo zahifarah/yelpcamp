@@ -35,7 +35,7 @@ router.get("/:id", catchAsync(async (req, res) => {
         }
     })
         .populate("author"); // returns query object
-    console.log(campground); // terminal feedback on show page GET request
+    // console.log(campground); // terminal feedback on show page GET request
     if (!campground) {
         req.flash("error", "Cannot find that campground!");
         return res.redirect("/campgrounds");
