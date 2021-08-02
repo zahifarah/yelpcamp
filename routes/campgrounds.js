@@ -6,7 +6,7 @@ const catchAsync = require("../utils/catchAsync"); // wrapper function to catch 
 // controllers: objects that contain methods representing the logic for specific routes
 const campgrounds = require("../controllers/campgrounds");
 
-// Routes are prepended by "/campgrounds"
+// Campground routes are prepended by "/campgrounds"
 // INDEX
 router.get("/", catchAsync(campgrounds.index));
 
