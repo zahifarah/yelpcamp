@@ -72,7 +72,7 @@ app.use((req, res, next) => {
     next(); // don't forget calling next() :)
 });
 
-// use routes
+// ROUTES
 app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
