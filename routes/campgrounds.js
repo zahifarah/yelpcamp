@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { isLoggedIn, isAuthor, validateCampground } = require("../middleware"); // isLoggedIn() middleware
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
-
 // Multer
 const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const { storage } = require("../cloudinary"); // storage connected to cloudinary, no need to require index.js as Node does so automatically.
+const upload = multer({ storage }); // set storage destination to cloudinary instead of locally.
 
 // controllers: objects that contain methods representing the logic for specific routes
 const campgrounds = require("../controllers/campgrounds");

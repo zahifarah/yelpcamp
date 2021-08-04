@@ -1,3 +1,9 @@
+// dotenv
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+};
+// console.log(process.env.SECRET); // testing if this works (it does)
+
 // include in module
 const express = require("express");
 const path = require("path"); // node module, allows customizing file and directory paths
