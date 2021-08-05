@@ -4,7 +4,7 @@ const { isLoggedIn, isAuthor, validateCampground } = require("../middleware"); /
 const catchAsync = require("../utils/catchAsync"); // wrapper function to catch errors and avoid try/catch everywhere
 // Multer
 const multer = require('multer')
-const { storage } = require("../cloudinary"); // storage connected to cloudinary, no need to require index.js as Node does so automatically.
+const { storage } = require("../cloudinary"); // storage connected to cloudinary (no need to require index.js as Node does so automatically).
 const upload = multer({ storage }); // set storage destination to cloudinary instead of locally.
 
 // controllers: objects that contain methods representing the logic for specific routes
@@ -14,14 +14,10 @@ const campgrounds = require("../controllers/campgrounds");
 
 router.route("/")
     .get(catchAsync(campgrounds.index)) // index
-    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground)); // new campground
-    .post((upload.array("image")), (req, res) => {
-        console.log(req.body, req.files);
-        res.send("MULTIPASS!")
-    });
+    .post(isLoggedIn, upload.array("image"), validateCampground, catchAsync(campgrounds.createCampground)); // new campground
 
 router.get("/new", isLoggedIn, campgrounds.renderNewForm); /* this should come before the show page,
-otherwise it will be confused by the runtime as an :id */
+otherwise it will be confused by the runtime (Node) as an :id */
 
 router.route("/:id")
     .get(catchAsync(campgrounds.showCampground)) // show page
