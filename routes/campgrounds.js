@@ -21,7 +21,7 @@ otherwise it will be confused by the runtime (Node) as an :id */
 
 router.route("/:id")
     .get(catchAsync(campgrounds.showCampground)) // show page
-    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground)) // update campground
+    .put(isLoggedIn, isAuthor, upload.array("image"), validateCampground, catchAsync(campgrounds.updateCampground)) // update campground
     .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground)); // delete campground
 
 router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm)); // edit campground
