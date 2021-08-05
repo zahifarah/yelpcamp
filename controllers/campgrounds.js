@@ -1,4 +1,5 @@
 const Campground = require("../models/campground");
+const { cloudinary } = require("../cloudinary"); // no need to specify index.js as Node checks for it automatically.
 
 // INDEX
 module.exports.index = async (req, res) => {
@@ -50,15 +51,24 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true });
-    const imgs = req.files.map(file => ({ url: file.path, filename: file.filename }));
+    console.log(req.body);
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
     campground.images.push(...imgs);
     await campground.save();
-    req.flash("success", "Successfully updated campground!");
-    console.log("UPDATED CAMPGROUND!")
-    console.log(campground);
-    res.redirect(`/campgrounds/${campground._id}`);
-};
+    if (req.body.deleteImages) { // if there are images to delete
+        for (let filename of req.body.deleteImages) { // if yes, loop over each one
+            await cloudinary.uploader.destroy(filename); // should delete that particular file
+        };
+        // updating campground that we've already found, a second time (so we don't need to find it again).
+        // pull from the images array, ALL images, where the filename of that image is in the req.body.deleteImages array.
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+    };
+    req.flash('success', 'Successfully updated campground!');
+    res.redirect(`/campgrounds/${campground._id}`)
+}
+
+
 
 // DELETE
 module.exports.deleteCampground = async (req, res) => {
