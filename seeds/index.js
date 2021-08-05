@@ -29,7 +29,24 @@ const seedDB = async () => {
             author: "610690009842478ee0b44c33",
             location: `${cities[random1000].city}, ${cities[random1000].state}`, // "Modesto, California", etc. 
             title: `${sample(descriptors)} ${sample(places)}`, // "Petrified Pond", etc.
-            image: "https://source.unsplash.com/collection/483251/", // 800x450
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144514/YelpCamp/udzdfuejl2naphba3pxi.jpg',
+                    filename: 'YelpCamp/udzdfuejl2naphba3pxi'
+                },
+                {
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144544/YelpCamp/bjfxhbridjsd9zv6apon.jpg',
+                    filename: 'YelpCamp/bjfxhbridjsd9zv6apon'
+                },
+                {
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144551/YelpCamp/zztsys73pymy9ys4jzln.jpg',
+                    filename: 'YelpCamp/zztsys73pymy9ys4jzln'
+                },
+                {
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144566/YelpCamp/srglas4ebkwldov5egzo.jpg',
+                    filename: 'YelpCamp/srglas4ebkwldov5egzo'
+                }
+            ],
             description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum, neque. Repellat possimus fugiat blanditiis distinctio tenetur nam! Saepe architecto voluptatem unde voluptatibus, quis quo minus perspiciatis facilis ipsam nam sed.",
             price
         });
