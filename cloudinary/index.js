@@ -9,9 +9,11 @@ cloudinary.config({
 
 // instance of cloudinary storage in this file
 const storage = new CloudinaryStorage({
-    cloudinary, // just configured above
-    folder: "YelpCamp",
-    allowedFormats: ["jpeg", "png", "jpg",]
+    cloudinary, // required up top
+    params: {
+        folder: "YelpCamp",
+        allowedFormats: ["jpeg", "png", "jpg",]
+    }
 });
 
 module.exports = {
