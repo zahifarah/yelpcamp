@@ -12,7 +12,9 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createCampground = async (req, res) => {
+    /* we inherit from multer access to req.files */
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
+    campground.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
     campground.author = req.user._id; // assign user._id to campground author key
     const added = await campground.save();
     req.flash("success", "New Campground successfully created!");
