@@ -31,20 +31,20 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`, // "Petrified Pond", etc.
             images: [
                 {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144514/YelpCamp/udzdfuejl2naphba3pxi.jpg',
-                    filename: 'YelpCamp/udzdfuejl2naphba3pxi'
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260454/YelpCamp/altsyzvoguygcsrjiljp.jpg',
+                    filename: 'YelpCamp/altsyzvoguygcsrjiljp'
                 },
                 {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144544/YelpCamp/bjfxhbridjsd9zv6apon.jpg',
-                    filename: 'YelpCamp/bjfxhbridjsd9zv6apon'
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260456/YelpCamp/ua2kb3dv9z7adtu04bii.jpg',
+                    filename: 'YelpCamp/ua2kb3dv9z7adtu04bii'
                 },
                 {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144551/YelpCamp/zztsys73pymy9ys4jzln.jpg',
-                    filename: 'YelpCamp/zztsys73pymy9ys4jzln'
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260458/YelpCamp/o2jaykpnnidfu8bfihhw.jpg',
+                    filename: 'YelpCamp/o2jaykpnnidfu8bfihhw'
                 },
                 {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628144566/YelpCamp/srglas4ebkwldov5egzo.jpg',
-                    filename: 'YelpCamp/srglas4ebkwldov5egzo'
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260460/YelpCamp/d9m0rbdrkbwiy40wlxsy.jpg',
+                    filename: 'YelpCamp/d9m0rbdrkbwiy40wlxsy'
                 }
             ],
             description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum, neque. Repellat possimus fugiat blanditiis distinctio tenetur nam! Saepe architecto voluptatem unde voluptatibus, quis quo minus perspiciatis facilis ipsam nam sed.",
