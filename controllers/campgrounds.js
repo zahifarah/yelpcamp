@@ -1,5 +1,9 @@
 const Campground = require("../models/campground");
 const { cloudinary } = require("../cloudinary"); // no need to specify index.js as Node checks for it automatically.
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapboxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapboxToken }); // new instance of mapbox containing:
+// (1) forwardGeocode (the one we need) and reverseGeocode + (2) our access token
 
 // INDEX
 module.exports.index = async (req, res) => {
@@ -13,13 +17,17 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createCampground = async (req, res) => {
-    /* we inherit from multer access to req.files */
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.campground.location,
+        limit: 1,
+    }).send();
     const campground = new Campground(req.body.campground); // returns {"campground: {"title: "Some Title", "location": "Some location"}"}
-    campground.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
+    campground.geometry = geoData.body.features[0].geometry;
+    campground.images = req.files.map(file => ({ url: file.path, filename: file.filename })); /* from multer we get access to req.files */
     campground.author = req.user._id; // assign user._id to campground author key
-    const added = await campground.save();
+    await campground.save();
+    console.log(campground);
     req.flash("success", "New Campground successfully created!");
-    console.log(`ADDED: ${added}`);
     res.redirect(`/campgrounds/${campground._id}`);
 };
 
