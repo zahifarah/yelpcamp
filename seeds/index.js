@@ -29,6 +29,11 @@ const seedDB = async () => {
             author: "610690009842478ee0b44c33",
             location: `${cities[random1000].city}, ${cities[random1000].state}`, // "Modesto, California", etc. 
             title: `${sample(descriptors)} ${sample(places)}`, // "Petrified Pond", etc.
+            price,
+            geometry: {
+                type: "Point",
+                coordinates: [-113.1331, 47.0202]
+            },
             images: [
                 {
                     url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260454/YelpCamp/altsyzvoguygcsrjiljp.jpg',
@@ -42,13 +47,8 @@ const seedDB = async () => {
                     url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260458/YelpCamp/o2jaykpnnidfu8bfihhw.jpg',
                     filename: 'YelpCamp/o2jaykpnnidfu8bfihhw'
                 },
-                {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260460/YelpCamp/d9m0rbdrkbwiy40wlxsy.jpg',
-                    filename: 'YelpCamp/d9m0rbdrkbwiy40wlxsy'
-                }
             ],
             description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum, neque. Repellat possimus fugiat blanditiis distinctio tenetur nam! Saepe architecto voluptatem unde voluptatibus, quis quo minus perspiciatis facilis ipsam nam sed.",
-            price
         });
         await camp.save();
     }
