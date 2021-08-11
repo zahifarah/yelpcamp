@@ -22,7 +22,7 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 // populate our mongo database with 50 randomly generated locations from our cities.js module
 const seedDB = async () => {
     await Campground.deleteMany({}); // delete all previous data to start fresh
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 500; i++) {
         const random1000 = Math.floor(Math.random() * 1000); // there are 1000 cities in cities.js module
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
