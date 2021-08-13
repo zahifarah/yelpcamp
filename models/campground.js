@@ -14,6 +14,8 @@ ImageSchema.virtual("thumbnail").get(function () {
     return this.url.replace("/upload", "/upload/w_300");
 });
 
+const opts = { toJSON: { virtuals: true } }; // to get mongoose virtuals to be part of the response object
+
 // campground schema
 const CampgroundSchema = new mongoose.Schema({
     title: String,
@@ -42,7 +44,15 @@ const CampgroundSchema = new mongoose.Schema({
             ref: 'Review'
         }
     ]
+}, opts);
+
+CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
+    return `
+    <strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
+    <p>${this.description.substring(0, 20)}...</p>
+    `
 });
+
 
 // Post Hook Middleware (when this runs the document has already been deleted)
 // but that's fine as it's passed in to the hook middleware and we have access to it.
