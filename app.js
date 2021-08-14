@@ -16,6 +16,7 @@ const methodOverride = require("method-override"); // override GET/POST verbs in
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
+const mongoSanitize = require('express-mongo-sanitize');
 
 // import routes
 const userRoutes = require("./routes/users");
@@ -43,6 +44,7 @@ app.set("views", path.join(__dirname, "views")); // view directory === absolute 
 app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded, returns a function
 app.use(methodOverride("_method")); // method-override
 app.use(express.static(path.join(__dirname, "public"))); // static directory === absolute path ends with /public
+app.use(mongoSanitize());
 
 // session configuration settings
 const sessionConfig = {
@@ -72,6 +74,7 @@ passport.deserializeUser(User.deserializeUser());
 // LOCALS middleware: accessible in all templates
 app.use((req, res, next) => {
     // console.log(req.session); // print entire session to see what's going on
+    console.log(req.query);
     res.locals.currentUser = req.user; // access deserialized User information via Passport
     res.locals.success = req.flash("success"); // flash access is scoped to every http requests
     res.locals.error = req.flash("error");
