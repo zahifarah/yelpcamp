@@ -13,3 +13,11 @@ new mapboxgl.Marker()
         .setHTML(`<h4>${campground.title}</h4><p>${campground.location}</p>`
         ))
     .addTo(map);
+
+// Add zoom and rotation controls to the map.
+const nav = new mapboxgl.NavigationControl({
+    showZoom: true,
+    visualizePitch: true,
+    showCompass: false,
+});
+map.addControl(nav);

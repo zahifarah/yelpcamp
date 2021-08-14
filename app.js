@@ -84,7 +84,7 @@ app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 // ========================================================================================================================
-// HOME (BROKEN)
+// HOME
 app.get("/", (req, res) => {
     res.render("home");
 });
