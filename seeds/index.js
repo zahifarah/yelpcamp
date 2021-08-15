@@ -39,16 +39,12 @@ const seedDB = async () => {
             },
             images: [
                 {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260454/YelpCamp/altsyzvoguygcsrjiljp.jpg',
-                    filename: 'YelpCamp/altsyzvoguygcsrjiljp'
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260669/YelpCamp/elvydo2qgdjaqkancktb.jpg',
+                    filename: 'YelpCamp/elvydo2qgdjaqkancktb'
                 },
                 {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260456/YelpCamp/ua2kb3dv9z7adtu04bii.jpg',
-                    filename: 'YelpCamp/ua2kb3dv9z7adtu04bii'
-                },
-                {
-                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260458/YelpCamp/o2jaykpnnidfu8bfihhw.jpg',
-                    filename: 'YelpCamp/o2jaykpnnidfu8bfihhw'
+                    url: 'https://res.cloudinary.com/cloud-yelp/image/upload/v1628260667/YelpCamp/tkihztznbbrnyhsv7jbb.jpg',
+                    filename: 'YelpCamp/tkihztznbbrnyhsv7jbb'
                 },
             ],
             description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum, neque. Repellat possimus fugiat blanditiis distinctio tenetur nam! Saepe architecto voluptatem unde voluptatibus, quis quo minus perspiciatis facilis ipsam nam sed.",
