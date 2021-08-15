@@ -4,6 +4,8 @@ if (process.env.NODE_ENV !== "production") {
 };
 // console.log(process.env.SECRET); // testing if this works (it does)
 
+// require("dotenv").config();
+
 // include in module
 const express = require("express");
 const path = require("path"); // node module, allows customizing file and directory paths
@@ -48,12 +50,14 @@ app.use(mongoSanitize());
 
 // session configuration settings
 const sessionConfig = {
+    name: "sesh",
     secret: "secret",
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true, /* helps mitigate the risk of client side 
         script accessing the protected cookie (if the browser supports it) */
+        // secure: true, /* cookies can only be configured over secure connections, i.e. HTTPS (localhost is NOT HTTPS) */
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // supported by IE
         maxAge: 1000 * 60 * 60 * 24 * 7, // not supported by IE but modern way of doing it
     }
