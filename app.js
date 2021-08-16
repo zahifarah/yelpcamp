@@ -2,11 +2,7 @@
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 };
-// console.log(process.env.SECRET); // testing if this works (it does)
 
-// require("dotenv").config();
-
-// include in module
 const express = require("express");
 const path = require("path"); // node module, allows customizing file and directory paths
 const mongoose = require("mongoose");
@@ -20,6 +16,10 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require("helmet");
+const MongoStore = require('connect-mongo');
+
+// MongoDB Atlas
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 
 // import routes
 const userRoutes = require("./routes/users");
@@ -27,7 +27,7 @@ const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 
 // MongoDB via Mongoose
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true, // (new) URL string parser 
     useCreateIndex: true, // (new) to define indexes in schemas
     useUnifiedTopology: true, // handles monitoring all the servers in a replica set or sharded cluster
@@ -35,7 +35,7 @@ mongoose.connect("mongodb://localhost:27017/yelp-camp", {
 });
 mongoose.connection.on("error", console.error.bind(console, "connection error:")); // set "this" value to console (via "bind")
 mongoose.connection.once("open", () => {
-    console.log("Mongoose (27017): \"yelp-camp\" connected.");
+    console.log("Connected to: " + dbUrl);
 });
 
 const app = express();
@@ -47,12 +47,29 @@ app.set("views", path.join(__dirname, "views")); // view directory === absolute 
 app.use(express.urlencoded({ extended: true })); // middleware that parses urlencoded, returns a function
 app.use(methodOverride("_method")); // method-override
 app.use(express.static(path.join(__dirname, "public"))); // static directory === absolute path ends with /public
-app.use(mongoSanitize());
+app.use(mongoSanitize({
+    replaceWith: "_"
+}));
+
+const secret = process.env.SECRET || "dolphin"
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: "dolphin"
+    }
+});
+
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e)
+})
 
 // session configuration settings
 const sessionConfig = {
+    store: store,
     name: "sesh",
-    secret: "secret",
+    secret: "dolphin",
     resave: false,
     saveUninitialized: true,
     cookie: {
