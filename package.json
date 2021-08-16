@@ -1,9 +1,5 @@
 {
     "name": "yelpcamp",
-    "engines": {
-        "node": "14.x",
-        "npm": "7.17.0"
-    },
     "version": "1.0.0",
     "description": "Node.js / Express.js / MongoDB: YelpCamp web application",
     "main": "index.js",
