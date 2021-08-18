@@ -51,7 +51,7 @@ app.use(mongoSanitize({
     replaceWith: "_"
 }));
 
-const secret = process.env.SECRET || "dolphin";
+const secret = process.env.SECRET || "dolphin"; // heroku secret
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
