@@ -28,6 +28,6 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 
 ### Register
 
-- <img src="./screenshots/index_m.png" width="300">
+- <img src="./screenshots/register_m.png" width="300">
 
 <p><em>Capstone project from Colt Steele's fullstack web dev course: https://www.udemy.com/course/the-web-developer-bootcamp/ <em></p>
