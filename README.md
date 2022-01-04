@@ -45,4 +45,18 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 <img src="./screenshots/hogwarts_pre_star.png" width="600">
 <img src="./screenshots/hogwarts_post_star.png" width="600">
 
+### Client-Side Error Handling
+
+<img src="./screenshots/error_registered.png" width="600">
+
+<img src="./screenshots/error_incorrect.png" width="600">
+
+<img src="./screenshots/success_login.png" width="600">
+
+### Server-Side Error Handling
+
+- Using postman to try to circumvent client-side error handling.
+
+<img src="./screenshots/server_side_validation.png" width="600">
+
 <p><em>Capstone project from Colt Steele's fullstack web dev course: https://www.udemy.com/course/the-web-developer-bootcamp/ <em></p>
