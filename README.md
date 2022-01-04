@@ -15,6 +15,7 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 - Visitors can create an account.
 - Registered users can create, read/view, update and delete their own campground reviews.
 - Users can upload multiple images for each campground they submit.
+- Error handling both on server-side and client-side implemented.
 
 ### Homepage
 
