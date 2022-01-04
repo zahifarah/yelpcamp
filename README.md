@@ -28,14 +28,17 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 
 ### Register User
 
-- <img src="./screenshots/register_m.png" width="300">
+<img src="./screenshots/register_m.png" width="300">
 
 ### Submit New Campground
 
 - Subsequently, users can only update/delete their own campgrounds and not others'.
   <img src="./screenshots/new_campground.png" width="600">
+
   <img src="./screenshots/new_campground_static_success.png" width="600">
+
   <img src="./screenshots/all_campgrounds.png" width="600">
+
   <img src="./screenshots/view_hogwarts.png" width="600">
 
 <p><em>Capstone project from Colt Steele's fullstack web dev course: https://www.udemy.com/course/the-web-developer-bootcamp/ <em></p>
