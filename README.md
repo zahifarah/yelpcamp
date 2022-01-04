@@ -58,5 +58,3 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 - Using postman to try to circumvent client-side error handling.
 
 <img src="./screenshots/server_side_validation.png" width="600">
-
-<p><em>Capstone project from Colt Steele's fullstack web dev course: https://www.udemy.com/course/the-web-developer-bootcamp/ <em></p>
