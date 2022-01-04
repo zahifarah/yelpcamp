@@ -53,8 +53,8 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 
 ### Client-Side Error Handling
 
-<img src="./screenshots/error_registered.png" width="600">
+<img src="./screenshots/error_registered.png" width="500">
 
-<img src="./screenshots/error_incorrect.png" width="600">
+<img src="./screenshots/error_incorrect.png" width="500">
 
-<img src="./screenshots/success_login.png" width="600">
+<img src="./screenshots/success_login.png" width="500">
