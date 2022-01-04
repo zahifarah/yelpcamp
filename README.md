@@ -14,7 +14,7 @@ Check it out here: https://secret-plateau-48638.herokuapp.com/
 ### Homepage
 
 - <img src="./screenshots/homepage.png" width="600">
-- <img src="./screenshots/homepage_m.png" width="600">
+- <img src="./screenshots/homepage_m.png" height="600">
 
 - Visitors can view listed campgrounds (and their reviews, ratings etc.)
 - Visitors can create an account.
